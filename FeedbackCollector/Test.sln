@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedbackCollector", "Test\FeedbackCollector.csproj", "{C01B5A77-2AB6-4F58-9645-0329246AD643}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedbackCollector.Core", "Test.Core\FeedbackCollector.Core.csproj", "{16926FA2-C43D-4D72-93E0-F8CB4D03C393}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C01B5A77-2AB6-4F58-9645-0329246AD643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C01B5A77-2AB6-4F58-9645-0329246AD643}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C01B5A77-2AB6-4F58-9645-0329246AD643}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C01B5A77-2AB6-4F58-9645-0329246AD643}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16926FA2-C43D-4D72-93E0-F8CB4D03C393}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16926FA2-C43D-4D72-93E0-F8CB4D03C393}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16926FA2-C43D-4D72-93E0-F8CB4D03C393}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16926FA2-C43D-4D72-93E0-F8CB4D03C393}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

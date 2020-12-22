@@ -1,0 +1,89 @@
+﻿
+
+<h2>Log In</h2>
+<div class="row">
+    <div class="col-md-8">
+        <section id="loginForm">        
+
+                <h4>Use a local account to log in.</h4>
+                <hr />
+                
+                <div class="form-group">
+                    <label class="control-label col-md-2"> Username</label>
+                 
+                    <div class="col-md-10">
+                        <input type="text" class = "form-control" id="UserName" name="UserName">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2"> Password</label>
+                    <div class="col-md-10">
+                        <input type="password" id="Password" class = "form-control" name="Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="button" value="Log in" id="btnLogIn" class="btn btn-default" />
+                    </div>
+                </div>
+               
+        </section>
+    </div>
+    
+</div>
+
+@section Scripts {
+   
+<script type="text/javascript">
+    $(document).ready(function () {
+        var vmMessage =@Html.Raw(Json.Encode(Session["Message"]));
+        if(vmMessage!=null && vmMessage!='')
+            alert(vmMessage);
+        });
+
+       
+
+        $('#btnLogIn').click(function () {
+
+            var username = $('#UserName').val();
+            var password = $('#Password').val();
+            
+            if (username == '') {
+                alert("Enter Username!");
+                return;
+            }
+            if (password == '') {
+                alert("Enter Password!");
+                return;
+            }
+
+            var data = {
+                username: username,
+                password: password
+            };
+            $.ajax({
+                type: "Get",
+                url: "/Login/LoginUser",
+                data: data,
+                success: function (res) {
+                    console.log(res);
+                    if(res==null || res.length<=0){
+                        window.location.href='/Login/Index';
+                    }else{
+                        window.location.href='/Post/Index';
+                    }
+                },
+                error: {
+
+                }
+            });
+        });
+     
+     
+
+</script>
+}

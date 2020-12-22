@@ -1,0 +1,189 @@
+﻿
+
+<script type="text/html" id="Template">
+    <div class="col-md-12">
+        {{#Model}}
+        <div class="form-group">
+            <div class="col-md-12">
+
+                <p>{{Text}} <br/> Posted By: {{PostBy}} <br/> {{PostTime}}<br/> No. of Comments- {{Comments}}</p>
+               
+            </div>
+            <div class="col-md-12">
+                <table id="Comments" class="display table-bordered" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Comment</th>
+                            <th>User</th>
+                            <th>Likes</th>
+                            <th>Dislikes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#CommentList}}
+                        <tr>
+                            <td>{{CommentText}}</td>
+                            <td>{{CommentBy}}</td>
+                            <td><span  style="cursor:pointer" class="glyphicon glyphicon-chevron-up"  onclick="ToggleCommentActivity('{{CommentID}}','Like')"></span>&nbsp;&nbsp; {{Likes}}</td>
+                            <td><span style="cursor:pointer" class="glyphicon glyphicon-chevron-down" onclick="ToggleCommentActivity('{{CommentID}}','DisLike')"></span>&nbsp;&nbsp;{{Dislikes}}</td>
+                        </tr>
+                        {{/CommentList}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {{/Model}}
+    </div>
+    
+</script>
+
+<div class="form-horizontal">
+    <h4>Posts</h4>
+    <hr />
+    <div class="form-group">
+        <div class="form-group">
+            <div class="col-md-6">
+                @*<input type="text" id="EntrieNo" name="EntrieNo">*@
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-8" >
+                    <input type="text" id="SearchText" placeholder="Search By User/Posts" name="SearchText" onchange="SearchBytext()">
+                </div>
+                
+            </div>
+        </div>
+        <div id="div-Id">
+
+        </div>
+        <div class="form-group">
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-3"><input type="button" id="btnPrev" onclick="Previous()" value="Previous" class="btn btn-default" /></div>
+                <div class="col-md-2"><input type="button" id="PageNo" class="btn btn-default" disabled="disabled"/></div> 
+                <div class="col-md-3"><input type="button" id="btnNext" onclick="Next()" value="Next" class="btn btn-default" /></div>               
+                <div class="col-md-4">
+                    <label class="control-label col-md-6"  id="Totalinfo" ></label>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+   
+</div>
+
+
+@section Scripts
+ {
+    <script src="~/Scripts/mustache.js"></script>
+    <script type="text/javascript">
+        var _pageNo = 1;
+        var _searchText = '';
+        var _totalInfo = 0;
+        var _entries = 3;
+        $(document).ready(function () {
+            _pageNo = 1;
+            $('#PageNo').val(_pageNo);
+             _searchText = '';
+             _totalInfo = 0;
+            loadData();
+        });
+
+        function Next() {
+            _pageNo = _pageNo + 1;
+
+            if (CheckTotalData() == true) {
+                loadData();
+            } else {
+                if (_pageNo > 1) { _pageNo = _pageNo - 1; }
+                
+            }
+
+            if (_totalInfo > 0 && _pageNo >= 1) {
+                $('#PageNo').val(_pageNo);
+            } else {
+                _pageNo = _pageNo - 1;
+                loadData();
+                $('#PageNo').val(_pageNo);
+                
+            }
+
+        }
+
+        function Previous() {
+            if (_pageNo > 1) {
+                _pageNo = _pageNo - 1;
+                loadData();
+                $('#PageNo').val(_pageNo);
+                
+            }
+        }
+
+        function SearchBytext() {
+            _searchText = $('#SearchText').val();
+            _pageNo = 1;
+            $('#PageNo').val(_pageNo);
+            loadData();
+            $('#SearchText').val(_searchText);
+        }
+       
+        function CheckTotalData() {
+            var totalData = _totalInfo;
+
+            var nextStart = (3 * (_pageNo - 1)) + 1;
+            if (nextStart > totalData) {
+                return false;
+            }
+            return true;
+        }
+
+        function loadData() {
+            var data = {
+                pageNo: _pageNo,
+                searcText: _searchText,
+                entries: _entries
+            };
+         $.ajax({
+             url: "/Post/GetAllPosts",
+             type: 'GET',
+             data:data,
+             success: function (res) {
+                 if (res != null) {
+                     SetPostTemplate(res);
+                     $('#Totalinfo').text('Total: '+res[0].TotalInfo);
+                     _totalInfo = res[0].TotalInfo;
+                 }
+               
+             }
+         });
+     }
+
+       function ToggleCommentActivity(commentID, activity) {
+
+            var data = {
+                CommentID: commentID,
+                ActivityType: activity
+            };
+            $.ajax({
+                type: "POST",
+                url: "/Post/ToggleCommentActivity",
+                data: data,
+                success: function (res) {
+                    loadData();
+                },
+                error: {
+
+                }
+            });
+        };
+
+        function SetPostTemplate(data) {
+            console.log(data);
+         var template = $('#Template').html();
+         var feed = Mustache.render(template, { "Model": data });
+         $('#div-Id').html(feed);
+     }
+    </script>
+}
